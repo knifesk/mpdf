@@ -14534,6 +14534,27 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		$use_h = $h;
 		$ratio = $actual_h / $use_w;
 
+        if ($overflow == 'get-height') {
+            $target = $h/$w;
+            $this->headerbuffer = '';
+            $this->HTMLheaderPageLinks = [];
+            $this->HTMLheaderPageAnnots = [];
+            $this->HTMLheaderPageForms = [];
+            $this->pageBackgrounds = $save_bgs;
+            $this->writingHTMLheader = false;
+            $this->writingHTMLfooter = false;
+            $this->fullImageHeight = false;
+            $this->ResetMargins();
+            $this->pgwidth = $this->w - $this->lMargin - $this->rMargin;
+            $this->SetXY($save_x, $save_y);
+            $this->title2annots = $save_annots; // *ANNOTATIONS*
+            $this->InFooter = false; // turns back on autopagebreaks
+            $this->pageoutput[$this->page] = [];
+            $this->pageoutput[$this->page]['Font'] = '';
+
+            return $actual_h;
+        }
+
 		if ($overflow != 'hidden' && $overflow != 'visible') {
 			$target = $h / $w;
 			if ($target > 0) {
